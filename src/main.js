@@ -1,6 +1,8 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {HDRLoader} from 'three/addons/loaders/HDRLoader.js';
 
 let camera, scene, renderer, candle, controls, flame, candleLight;
 
@@ -83,6 +85,30 @@ function init() {
   controls.screenSpacePanning = false;
   controls.minDistance = 2;
   controls.maxDistance = 10;
+
+  new HDRLoader()
+    .setPath('textures/')
+    .load('castle_zavelstein_cellar_1k.hdr', function (texture) {
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+
+      scene.background = texture;
+      scene.environment = texture;
+
+      // model
+
+      const loader = new GLTFLoader().setPath(
+        'models/gltf/DamagedHelmet/glTF/',
+      );
+      loader.load('DamagedHelmet.gltf', async function (gltf) {
+        const model = gltf.scene;
+
+        // wait until the model can be added to the scene without blocking due to shader compilation
+
+        await renderer.compileAsync(model, camera, scene);
+
+        scene.add(model);
+      });
+    });
 }
 
 function animate() {
