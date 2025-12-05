@@ -20,7 +20,7 @@ function loadBackgroundEnvironment() {
 
   // Load the background environment (untitled.glb)
   loader.load(
-    '/untitled.glb',
+    './untitled.glb',
     function (gltf) {
       const backgroundModel = gltf.scene;
 
@@ -56,7 +56,7 @@ function loadWinterScene() {
 
   // Load the winter neighborhood model
   loader.load(
-    '/winter-scene/malli.gltf',
+    './winter-scene/malli.gltf',
     function (gltf) {
       const winterModel = gltf.scene;
 
